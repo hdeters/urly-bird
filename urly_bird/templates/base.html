@@ -1,0 +1,38 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--<link rel="shortcut icon" href="{% static "favicon.ico" %}"/>-->
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <!--<link rel="stylesheet" href="{% static "urly_bird/style.css" %}"/>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Urly Bird</title>
+</head>
+<body>
+
+{% if request.user.is_authenticated %}
+<li>
+    <a href="{% url 'show_user' request.user.id %}">{{ request.user.username }}</a>
+</li>
+<li>
+    <a href="{% url 'logout' %}">Logout</a>
+</li>
+{% else %}
+<li>
+    <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
+</li>
+<li>
+    <a href="{% url 'user_register' %}?next={{request.path}}">Register</a>
+</li>
+{% endif %}
+
+<div class="container">
+    {% bootstrap_messages %}
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

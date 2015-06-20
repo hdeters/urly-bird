@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>All Bookmarks</h2>
+
+<div align="center">
+
+    {% for bm in all_bookmarks %}
+    <p>{{ bm.title }}</p>
+    <p><a href="{% url 'show_user' bm.user.id %}">{{ bm.user }}</a></p>
+    <p>{{ bm.marked_at }}</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

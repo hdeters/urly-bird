@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{ user.username }}</h2>
+
+        <div align="center">
+            <p>
+                Age: {{ user.profile.age }}<br />
+                Location: {{ user.profile.location }}<br />
+                Interests: {{ user.profile.interests }}
+            </p>
+
+            <h3>Bookmarks:</h3>
+            {% if own %}
+            {% for bm in bookmarks %}
+                <p><a href="{% url 'show_bookmark' bm.id %}">{{ bm }}</a></p>
+                <p><a href="{% url 'update_bookmark' bm.id %}">Update</a>
+                    <a href="{% url 'delete_bookmark' bm.id %}">Delete</a></p>
+            {% endfor %}
+            {% else %}
+            {% for bm in bookmarks %}
+                <p><a href="{% url 'show_bookmark' bm.id %}">{{ bm }}</a></p>
+            {% endfor %}
+            {% endif %}
+
+
+        </div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+#!/Users/Hannah/Documents/PythonProjects/urly-bird/.direnv/python-3.4.3/bin/python3.4
+# coding=utf-8
+
+from faker.cli import execute_from_command_line
+
+if __name__ == '__main__':
+    execute_from_command_line()

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ bookmark.title }}</h2>
+{% if request.user == bookmark.user %}
+<a href="{% url 'update_bookmark' bookmark.id %}">Update</a>
+<a href="{% url 'delete_bookmark' bookmark.id %}">Delete</a>
+{% endif %}
+
+<div align="center">
+    <p>
+        User: {{ bookmark.user.username }}<br/>
+        Description: {{ bookmark.desc }}<br/>
+        Bookmarked: {{ bookmark.marked_at }}
+    </p>
+
+    <h3>Clicks:</h3>
+    {% for click in clicks %}
+    <p>User: {{ click.user_id }}</p>
+
+    <p>Clicked: {{ click.time }}</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
