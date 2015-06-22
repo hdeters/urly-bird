@@ -2,11 +2,11 @@
 {% load bootstrap3 %}
 
 {% block content %}
-<h2>{{ user.username }}</h2>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
+            <h2>{{ user.username }}</h2>
             <p>
                 Age: {{ user.profile.age }}<br/>
                 Location: {{ user.profile.location }}<br/>
@@ -14,19 +14,14 @@
             </p>
         </div>
         <div class="col-md-6">
-            <h3>Bookmarks:</h3>
-            {% if own %}
+
+            <h3>Most Popular Bookmarks:</h3>
             {% for bm in bookmarks %}
-            <p><a href="{% url 'show_bookmark' bm.id %}">{{ bm }}</a>-{{ bm.click_count }} clicks</p>
+            <h4><a href="{% url 'show_bookmark' bm.id %}">{{ bm }}</a>-{{ bm.click_count }} clicks</h4>
 
             <p><a href="{% url 'update_bookmark' bm.id %}">Update</a>
                 <a href="{% url 'delete_bookmark' bm.id %}">Delete</a></p>
             {% endfor %}
-            {% else %}
-            {% for bm in bookmarks %}
-            <p><a href="{% url 'show_bookmark' bm.id %}">{{ bm }}</a>-{{ bm.click_count }} clicks</p>
-            {% endfor %}
-            {% endif %}
         </div>
     </div>
 </div>

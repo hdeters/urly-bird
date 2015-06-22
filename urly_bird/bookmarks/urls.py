@@ -18,9 +18,12 @@ from bookmarks import views as bm_views
 
 urlpatterns = [
     url(r'^$', bm_views.AllBookmarksView.as_view(), name="all_bookmarks"),
-    url(r'^(?P<bm_id>\d+)$', bm_views.ShowBookmarkDetailView.as_view(), name="show_bookmark"),
+    url(r'^show/(?P<bm_id>\d+)$', bm_views.ShowBookmarkDetailView.as_view(), name="show_bookmark"),
+    url(r'^tag/(?P<tag_id>\d+)$', bm_views.TagListView.as_view(), name="show_tag"),
     url(r'^add$', bm_views.AddBookmarkView.as_view(), name="add_bookmark"),
     url(r'^update/(?P<bm_id>\d*)$', bm_views.BookmarkUpdate.as_view(), name="update_bookmark"),
     url(r'^delete/(?P<bm_id>\d+)$', bm_views.BookmarkDelete.as_view(), name='delete_bookmark'),
-
+    url(r'^(?P<url>\w*)$', bm_views.ShowSite.as_view(), name='show_site'),
+    url(r'^clicks.png', bm_views.click_chart, name="click_chart"),
+    url(r'^link/(?P<bm_id>\d*).png', bm_views.link_chart, name="link_chart")
 ]

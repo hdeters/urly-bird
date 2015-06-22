@@ -1,16 +1,29 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
 <h2>All Bookmarks</h2>
+<h4>Tags</h4>
+{% for tag in tags %}
+<a href="{% url 'show_tag' tag.id %}">{{ tag.name }}</a> |
+{% endfor %}
 
-<div align="center">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {% for bm in all_bookmarks %}
 
-    {% for bm in all_bookmarks %}
-    <p>{{ bm.title }}</p>
-    <p><a href="{% url 'show_user' bm.user.id %}">{{ bm.user }}</a></p>
-    <p>{{ bm.marked_at }}</p>
-    {% endfor %}
+            <h4><a href="{% url 'show_bookmark' bm.id %}">{{ bm.title }}</a></h4>
 
+            <p><a href="{% url 'show_user' bm.user.id %}">{{ bm.user }}</a> -- {{ bm.marked_at }}</p>
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <img src="{% url 'click_chart' %}"/>
+        </div>
+    </div>
 </div>
 
+
+{% bootstrap_pagination page_obj %}
 {% endblock %}

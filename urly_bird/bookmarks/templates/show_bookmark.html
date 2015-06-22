@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
 <h2>{{ bookmark.title }}</h2>
@@ -7,20 +8,32 @@
 <a href="{% url 'delete_bookmark' bookmark.id %}">Delete</a>
 {% endif %}
 
-<div align="center">
-    <p>
-        User: {{ bookmark.user.username }}<br/>
-        Description: {{ bookmark.desc }}<br/>
-        Bookmarked: {{ bookmark.marked_at }}
-    </p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
 
-    <h3>Clicks:</h3>
-    {% for click in clicks %}
-    <p>User: {{ click.user_id }}</p>
+            <h3>Clicks:</h3>
+            {% for click in clicks %}
+            User: <a href="{% url 'show_user' click.user_id.id %}">{{ click.user_id }}</a>
 
-    <p>Clicked: {{ click.time }}</p>
-    {% endfor %}
+            <p>Clicked: {{ click.time }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            <img src="{% url 'link_chart' bookmark.id %}"/>
+
+            <p>
+                User: <a href="{% url 'show_user' bookmark.user.id %}">{{ bookmark.user.username }}</a><br/>
+                Description: {{ bookmark.desc }}<br/>
+                Bookmarked: {{ bookmark.marked_at }}<br/>
+                Tags: {% for tag in bookmark.get_tags %}
+                {{ tag }} | 
+                {% endfor %}<br />
+                URL: <a href="{% url 'show_site' bookmark.hash_id %}">www.urly-bird.com/{{ bookmark.hash_id }}</a>
+            </p>
+        </div>
+    </div>
 
 </div>
-
 {% endblock %}

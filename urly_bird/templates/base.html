@@ -4,32 +4,49 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <!--<link rel="shortcut icon" href="{% static "favicon.ico" %}"/>-->
+    <link rel="shortcut icon" href="{% static "bird.png" %}"/>
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    <!--<link rel="stylesheet" href="{% static "urly_bird/style.css" %}"/>-->
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Urly Bird</title>
 </head>
 <body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <img class = "navbar-brand" src={% static "bird-2.png" %}>
+            <a class='navbar-brand' href="{% url 'all_bookmarks' %}">Urly Bird</a>
+        </div>
+        {% if request.user.is_authenticated %}
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="{% url 'add_bookmark' %}">New Bookmark</a>
+            </li>
+            <li>
+                <a href="{% url 'show_stats' request.user.id %}">{{ request.user.username }}</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">Logout</a>
+            </li>
+        </ul>
+        {% else %}
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
+            </li>
+            <li>
+                <a href="{% url 'user_register' %}?next={{request.path}}">Register</a>
+            </li>
+        </ul>
+        {% endif %}
+        </ul>
+    </div>
+    </div>
+</nav>
 
-{% if request.user.is_authenticated %}
-<li>
-    <a href="{% url 'show_user' request.user.id %}">{{ request.user.username }}</a>
-</li>
-<li>
-    <a href="{% url 'logout' %}">Logout</a>
-</li>
-{% else %}
-<li>
-    <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
-</li>
-<li>
-    <a href="{% url 'user_register' %}?next={{request.path}}">Register</a>
-</li>
-{% endif %}
 
-<div class="container">
+<div class="container-fluid">
     {% bootstrap_messages %}
     {% block content %}
     {% endblock %}

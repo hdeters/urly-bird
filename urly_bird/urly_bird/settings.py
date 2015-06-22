@@ -73,7 +73,7 @@ BOOTSTRAP3 = {
     'css_url': None,
 
     # # The complete URL to the Bootstrap CSS file (None means no theme) use bootswatch for this
-    # 'theme_url': '/static/bootstrap/css/superhero/bootstrap.min.css',
+    'theme_url': '/static/bootstrap/css/flatly/bootstrap.min.css',
 
     # The complete URL to the Bootstrap JavaScript file (None means derive it from base_url)
     'javascript_url': None,

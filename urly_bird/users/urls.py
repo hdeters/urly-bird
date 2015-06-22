@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^user/(?P<user_id>\d+)$', users_views.ShowUserDetailView.as_view(), name="show_user"),
     url(r'^login/$', views.login, {'template_name': 'login.html'}, name="login"),
     url(r'^logout/$', views.logout, {'next_page': 'login'}, name='logout'),
+    url(r'^stats/(?P<user_id>\d+)$', users_views.ShowStatsDetailView.as_view(), name="show_stats"),
 ]
 
 
