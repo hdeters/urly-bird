@@ -56,10 +56,8 @@ class ShowUserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         bookmarks = Bookmark.objects.filter(user=self.object).annotate(click_count=Count('click')).order_by('-marked_at')
-        # Movie.movies.annotate(rating_count=Count('rating'),
-        #                              avg_rating=Avg('rating__rating'), ).filter(rating_count__gte=10).order_by(
-        # '-avg_rating')
-        # bookmarks = Bookmark.objects.filter(user=self.object).order_by("-marked_at")
+        #time = timezone.now() - timezone.timedelta(days=30)
+        #bookmarks.filter(click__time__gte=time)
         user = self.request.user
         if user == self.object:
             own = True

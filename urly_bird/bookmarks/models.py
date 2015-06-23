@@ -15,7 +15,7 @@ class Tag(models.Model):
 class Bookmark(models.Model):
     user = models.ForeignKey(User)
     desc = models.CharField(max_length=255, null=True, blank=True)
-    marked_at = models.DateTimeField()
+    marked_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=255)
     url = models.URLField(null=True)
     hash_id = models.CharField(max_length=150, null=True)
@@ -35,7 +35,7 @@ class Bookmark(models.Model):
 class Click(models.Model):
     user_id = models.ForeignKey(User, null=True, blank=True)
     bookmark = models.ForeignKey(Bookmark)
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}: {}".format(self.bookmark, self.time)
@@ -45,7 +45,7 @@ def create_bookmarks():
     fake = Factory.create()
     hashids = Hashids(salt='saltstring')
     for user in User.objects.all():
-        for _ in range(35):
+        for _ in range(10):
             description = fake.text(max_nb_chars=120)
             time = fake.date_time_between(start_date="-90d", end_date="now")
             title = fake.color_name()
@@ -60,7 +60,7 @@ def create_bookmarks():
 def create_clicks():
     fake = Factory.create()
     for bookmark in Bookmark.objects.all():
-        num_clicks = random.randint(10,60)
+        num_clicks = random.randint(10,15)
         for _ in range(num_clicks):
             user_id = User.objects.order_by('?').first()
             bm = bookmark

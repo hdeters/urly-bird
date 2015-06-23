@@ -28,7 +28,7 @@
                 Description: {{ bookmark.desc }}<br/>
                 Bookmarked: {{ bookmark.marked_at }}<br/>
                 Tags: {% for tag in bookmark.get_tags %}
-                {{ tag }} | 
+                {{ tag }} |
                 {% endfor %}<br />
                 URL: <a href="{% url 'show_site' bookmark.hash_id %}">www.urly-bird.com/{{ bookmark.hash_id }}</a>
             </p>
