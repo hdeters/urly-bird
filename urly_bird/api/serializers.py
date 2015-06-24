@@ -1,5 +1,6 @@
 from bookmarks.models import Bookmark, Tag, Click
 from users.models import Profile
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from hashids import Hashids
@@ -14,6 +15,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+
     class Meta:
         model = Profile
         fields = ('location', 'age', 'interests', 'user')
@@ -27,38 +29,20 @@ class ClickSerializer(serializers.ModelSerializer):
         model = Click
         fields = ('user_id', 'bookmark', 'time',)
 
-
-class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
-    username = serializers.CharField(max_length=100)
-    id = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
-    profile = serializers.HyperlinkedRelatedField(read_only=True, view_name='profile_detail')
-
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'password', 'profile')
-        write_only_fields = ('password',)
-
-    def create(self, validated_data):
-        user = super(UserSerializer, self).create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
-
-
 class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
     tags = TagSerializer(many=True, read_only=True)
     link_url = serializers.CharField(source='url')
     hash_id = serializers.SerializerMethodField()
     _url = serializers.HyperlinkedIdentityField(view_name='bookmark-detail')
-    click_count = serializers.IntegerField(read_only=True, source='click_set.count')
+    click_count = serializers.IntegerField(read_only=True)
     clicks = serializers.HyperlinkedIdentityField(view_name='create_click')
-    #_links = serializers.SerializerMethodField()
+    # _links = serializers.SerializerMethodField()
 
     class Meta:
         model = Bookmark
-        fields = ('id', '_url', 'title', 'desc', 'user', 'marked_at', 'hash_id', 'tags', 'link_url', 'clicks', 'click_count')
+        fields = (
+        'id', '_url', 'title', 'desc', 'user', 'marked_at', 'hash_id', 'tags', 'link_url', 'clicks', 'click_count')
 
     def get_hash_id(self, obj):
         return obj.hash_id
@@ -76,3 +60,29 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
         bookmark.hash_id = hash
         bookmark.save()
         return bookmark
+
+
+class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    username = serializers.CharField(max_length=100)
+    id = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+    profile = serializers.HyperlinkedRelatedField(read_only=True, view_name='profile_detail')
+    bookmark_set = BookmarkSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'password', 'profile', 'bookmark_set',)
+        write_only_fields = ('password',)
+
+    def create(self, validated_data):
+        user = super(UserSerializer, self).create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+
+        user = authenticate(username=user.username,
+                            password=validated_data['password'])
+
+        login(self.context.get('request'), user)
+
+        return user
+

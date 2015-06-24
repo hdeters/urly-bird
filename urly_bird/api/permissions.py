@@ -15,11 +15,17 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return request.user == obj.user
 
 class MakeNewUser(permissions.BasePermission):
+
     def has_permission(self, request, view):
         if request.method == 'POST':
-            if request.user.is_authenticated():
-                return False
-            else:
-                return True
+            return not request.user.is_authenticated()
         else:
             return True
+
+
+# class CanDelete(permissions.BasePermission):
+#     def has_object_permission(self, request, view, obj):
+#         if request.method == 'DELETE':
+#             return request.user == obj
+
+

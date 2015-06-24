@@ -32,7 +32,7 @@ class Bookmark(models.Model):
 
 class Click(models.Model):
     user_id = models.ForeignKey(User, null=True, blank=True)
-    bookmark = models.ForeignKey(Bookmark)
+    bookmark = models.ForeignKey(Bookmark, related_name='clicks')
     time = models.DateTimeField(auto_now=True)
 
     def __str__(self):

@@ -1,7 +1,8 @@
 from bookmarks.models import Bookmark, Click
 from users.models import Profile
 from api.permissions import IsOwnerOrReadOnly, MakeNewUser
-from django.db.models.sql.aggregates import Count
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, generics, filters
 from api.serializers import ClickSerializer, UserSerializer, BookmarkSerializer, ProfileSerializer
 from rest_framework.exceptions import PermissionDenied
@@ -12,14 +13,15 @@ import django_filters
 class BookmarkFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(name="title", lookup_type="icontains")
     desc = django_filters.CharFilter(name="desc", lookup_type="icontains")
+    user = django_filters.CharFilter(name="user", lookup_type="exact")
 
     class Meta:
         model = Bookmark
-        fields = ['title', 'desc']
+        fields = ['title', 'desc', 'user']
 
 
 class BookmarkViewSet(viewsets.ModelViewSet):
-    queryset = Bookmark.objects.all()
+    queryset = Bookmark.objects.all().annotate(click_count=Count('clicks'))
     serializer_class = BookmarkSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
