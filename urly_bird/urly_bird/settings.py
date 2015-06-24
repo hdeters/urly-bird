@@ -57,6 +57,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10
+}
+
 ROOT_URLCONF = 'urly_bird.urls'
 LOGIN_REDIRECT_URL = '/b/'
 LOGIN_URL = 'users/login'

@@ -17,14 +17,11 @@ class BookmarkViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-    #                       IsOwnerOrReadOnly)
-
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                           IsOwnerOrReadOnly)
 
 
 class ClickViewSet(viewsets.ReadOnlyModelViewSet):
