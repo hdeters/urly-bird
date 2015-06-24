@@ -13,3 +13,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return request.user == obj
         else:
             return request.user == obj.user
+
+class MakeNewUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            if request.user.is_authenticated():
+                return False
+            else:
+                return True
+        else:
+            return True

@@ -21,15 +21,13 @@ class Bookmark(models.Model):
     hash_id = models.CharField(max_length=150, null=True)
     tags = models.ManyToManyField(Tag)
 
-    # def get_absolute_url(self):
-    #     return reverse('show_update', kwargs={"update_id": self.id})
-
     def __str__(self):
         return "{}".format(self.title)
 
     @property
     def get_tags(self):
         return [tag.name for tag in self.tags.all()]
+
 
 
 class Click(models.Model):
