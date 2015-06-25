@@ -18,7 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('location', 'age', 'interests', 'user')
+        fields = ('id', 'location', 'age', 'interests', 'user')
 
 
 class ClickSerializer(serializers.ModelSerializer):
@@ -29,9 +29,10 @@ class ClickSerializer(serializers.ModelSerializer):
         model = Click
         fields = ('user_id', 'bookmark', 'time',)
 
+
 class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
-    tags = TagSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True)
     link_url = serializers.CharField(source='url')
     hash_id = serializers.SerializerMethodField()
     _url = serializers.HyperlinkedIdentityField(view_name='bookmark-detail')
@@ -42,7 +43,7 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bookmark
         fields = (
-        'id', '_url', 'title', 'desc', 'user', 'marked_at', 'hash_id', 'tags', 'link_url', 'clicks', 'click_count')
+            'id', '_url', 'title', 'desc', 'user', 'marked_at', 'hash_id', 'tags', 'link_url', 'clicks', 'click_count')
 
     def get_hash_id(self, obj):
         return obj.hash_id
@@ -85,4 +86,3 @@ class UserSerializer(serializers.ModelSerializer):
         login(self.context.get('request'), user)
 
         return user
-

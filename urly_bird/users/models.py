@@ -38,6 +38,6 @@ def create_profiles():
 
 def create_users():
     fake = Factory.create()
-    for _ in range(150):
+    for _ in range(100):
         user = User.objects.create_user(username=fake.user_name(), email=fake.email(), password='password')
         user.save()

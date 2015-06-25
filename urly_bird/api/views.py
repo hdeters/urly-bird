@@ -33,21 +33,11 @@ class BookmarkViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (MakeNewUser,)
 
     def get_queryset(self):
         queryset = User.objects.filter(pk=self.request.user.id)
-        return queryset
-
-
-class ProfileDetailView(generics.RetrieveUpdateAPIView):
-    serializer_class = ProfileSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_queryset(self):
-        queryset = Profile.objects.filter(user=self.request.user)
         return queryset
 
 
@@ -66,3 +56,12 @@ class ClickListCreateView(generics.ListCreateAPIView):
             serializer.save(user_id=self.request.user, bookmark=self.bookmark)
         else:
             serializer.save(user_id=User.objects.filter(username='Anonymous')[0], bookmark=self.bookmark)
+
+
+class ProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+
+
